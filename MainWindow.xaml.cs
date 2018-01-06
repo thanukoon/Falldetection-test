@@ -246,6 +246,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
         }
 
+
         /// <summary>
         /// Gets or sets the current status text to display
         /// </summary>
