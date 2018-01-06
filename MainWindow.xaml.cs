@@ -386,6 +386,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
 
 
+
                             this.DrawBody(joints, jointPoints, dc, drawPen);
 
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
