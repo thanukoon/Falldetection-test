@@ -392,6 +392,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         }
                     }
 
+
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                 }
