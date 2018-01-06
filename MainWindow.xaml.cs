@@ -317,6 +317,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             bool dataReceived = false;
             string message = "No Skeleton Data";
+            
 
             using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
             {
@@ -397,6 +398,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 }
             }
             TextH.Text = message;
+            
         }
 
         /// <summary>
@@ -476,14 +478,20 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="drawingContext">drawing context to draw to</param>
         private void DrawHand(HandState handState, Point handPosition, DrawingContext drawingContext)
         {
+            string sta ;
             switch (handState)
             {
                 case HandState.Closed:
                     drawingContext.DrawEllipse(this.handClosedBrush, null, handPosition, HandSize, HandSize);
+                    sta = "Alert: Close Hand";
+                    Texts.Text = sta;
+
                     break;
 
                 case HandState.Open:
                     drawingContext.DrawEllipse(this.handOpenBrush, null, handPosition, HandSize, HandSize);
+                    sta = "Alert: Open Hand";
+                    Texts.Text = sta;
                     break;
 
                 case HandState.Lasso:
