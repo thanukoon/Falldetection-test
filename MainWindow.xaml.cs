@@ -488,6 +488,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                     break;
 
+
                 case HandState.Open:
                     drawingContext.DrawEllipse(this.handOpenBrush, null, handPosition, HandSize, HandSize);
                     sta = "Alert: Open Hand";
