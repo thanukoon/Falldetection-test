@@ -374,7 +374,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                 DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
 
-                                message = string.Format("SKelton: X:{0:0.0} Y:{1:0.0} Z:{2:0.0}",
+                                message = string.Format("SKelton: X:{0:0.0} Y:{1:0.0} Z:{2:0.0}",   // สร้าง postion บนร่างกาย ด้วย x,y,z 
                          //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
                          //this.bones.(new Tuple<JointType,JointType>(JointType.SpineBase , JointType.SpineBase)),
                          spine.Position.X,
@@ -484,15 +484,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 case HandState.Closed:
                     drawingContext.DrawEllipse(this.handClosedBrush, null, handPosition, HandSize, HandSize);
-                    sta = "Alert: Close Hand";
+                    sta = "Alert: Close Hand"; // alert เมื่อกำมือ
                     Texts.Text = sta;
 
                     break;
 
-
                 case HandState.Open:
                     drawingContext.DrawEllipse(this.handOpenBrush, null, handPosition, HandSize, HandSize);
-                    sta = "Alert: Open Hand";
+                    sta = "Alert: Open Hand"; // alert เมื่อแบมือ
                     Texts.Text = sta;
                     break;
 
