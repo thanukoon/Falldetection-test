@@ -132,6 +132,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private string statusText = null;
 
         private Floor _floor = null;
+        private Body _body = null;
         public Vector4 FloorClipPlane { get; }
 
        
@@ -240,6 +241,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             public float y { get; internal set; }
             public float z { get; internal set; }
             public float w { get; internal set; }
+
             public Floor(Vector4 floorClipPlane) {
                 x = floorClipPlane.X;
                 y = floorClipPlane.Y;
@@ -253,6 +255,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 double denominator = Math.Sqrt(x * x + y * y + z * z);
 
                 Console.WriteLine(numerator / denominator);
+               
                 return numerator / denominator;
             }
 
@@ -352,23 +355,29 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             float y1;
             float z1;
             float w1;
+            double aa;
 
 
             using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
             {
                 if (bodyFrame != null)
                 {
-                   
+                    Floor floor = new Floor(FloorClipPlane);
 
+
+                    //floor.DistanceFrom();
+                  
 
                     Vector4 floorClipPlane = bodyFrame.FloorClipPlane;
                      x1 = floorClipPlane.X;
                      y1 = floorClipPlane.Y;
                      z1 = floorClipPlane.Z;
                      w1 = floorClipPlane.W;
+
                     
                     con = Math.Sqrt(x1 * x1 + y1 * y1 + z1 * z1);
-
+                   
+                  
                   
 
                     if (this.bodies == null)
@@ -384,79 +393,96 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                    
                 }
             }
+
             
             if (dataReceived)
             {
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
-                    // Draw a transparent background to set the render size
-                    dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
-
-                    int penIndex = 0;
-                    foreach (Body body in this.bodies)
+                    using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
                     {
-                        Pen drawPen = this.bodyColors[penIndex++];
 
-                        if (body.IsTracked)
+
+                        // Draw a transparent background to set the render size
+                        dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+
+                        int penIndex = 0;
+                        foreach (Body body in this.bodies)
                         {
-                            this.DrawClippedEdges(body, dc);
+                            Pen drawPen = this.bodyColors[penIndex++];
 
-                            IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
-
-                            // convert the joint points to depth (display) space
-                            Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
-
-                            foreach (JointType jointType in joints.Keys)
+                            if (body.IsTracked)
                             {
-                                // sometimes the depth(Z) of an inferred joint may show as negative
-                                // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
-                               
-                                CameraSpacePoint position = joints[jointType].Position;
-                                if (position.Z < 0)
+                                this.DrawClippedEdges(body, dc);
+
+                                IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
+
+                                // convert the joint points to depth (display) space
+                                Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
+
+                                foreach (JointType jointType in joints.Keys)
                                 {
-                                    position.Z = InferredZPositionClamp;
+                                    // sometimes the depth(Z) of an inferred joint may show as negative
+                                    // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
+
+                                    CameraSpacePoint position = joints[jointType].Position;
+                                    if (position.Z < 0)
+                                    {
+                                        position.Z = InferredZPositionClamp;
+                                    }
+                                   
+                                        Vector4 floorClipPlane = bodyFrame.FloorClipPlane;
+                                        float X = floorClipPlane.X;
+                                        float Y = floorClipPlane.Y;
+                                        float Z = floorClipPlane.Z;
+                                        float W = floorClipPlane.W;
+
+                                    CameraSpacePoint ee = joints[JointType.WristLeft].Position;
+
+                                    double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;                               
+                                    double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
+                                    double ans = numerator / denominator;
+                                    Console.WriteLine(ans);
+
+
+                                    
+
+
+
+
+                                    var spine = body.Joints[JointType.SpineMid];
+
+
+
+                                    DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
+                                    jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+
+                                    message = string.Format("SKelton: X:{0:0.0} Y:{1:0.0} Z:{2:0.0}",   // สร้าง postion บนร่างกาย ด้วย x,y,z 
+                                                                                                        //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
+                                                                                                        //this.bones.(new Tuple<JointType,JointType>(JointType.SpineBase , JointType.SpineBase)),
+                             spine.Position.X,
+                             spine.Position.Y,
+                             spine.Position.Z);
+                                    // position.X,
+                                    // position.Y,
+                                    // position.Z);
                                 }
 
-                             
-
-                          
-
-                                var spine = body.Joints[JointType.SpineMid];
-
-
-                                
 
 
 
 
 
-                                DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
-                                jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
 
-                                message = string.Format("SKelton: X:{0:0.0} Y:{1:0.0} Z:{2:0.0}",   // สร้าง postion บนร่างกาย ด้วย x,y,z 
-                         //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
-                         //this.bones.(new Tuple<JointType,JointType>(JointType.SpineBase , JointType.SpineBase)),
-                         spine.Position.X,
-                         spine.Position.Y,
-                         spine.Position.Z);
-                         // position.X,
-                         // position.Y,
-                         // position.Z);
+                                this.DrawBody(joints, jointPoints, dc, drawPen);
+
+                                this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
+                                this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                             }
-
-                           
-
-
-
-
-                            this.DrawBody(joints, jointPoints, dc, drawPen);
-
-                            this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
-                            this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                         }
+                        // prevent drawing outside of our render area
+                        this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                     }
-                    // prevent drawing outside of our render area
-                    this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                 }
 
             }
@@ -465,6 +491,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
           
             
         }
+       
 
         /// <summary>
         /// Draws a body
