@@ -7,6 +7,8 @@
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
     using System;
+    using System.Windows.Data;
+    using Microsoft.Kinect.Toolkit;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -16,6 +18,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Linq;
+
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -126,18 +130,19 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// Current status text to display
         /// </summary>
         private string statusText = null;
-       
+
+        private Floor _floor = null;
+        public Vector4 FloorClipPlane { get; }
 
        
+
+
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
         public MainWindow()
         {
-            
-
-
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
 
@@ -228,7 +233,31 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent(); //สร้างหน้าต่าง component 
+            
         }
+        public class Floor {
+            public float x { get; internal set; }
+            public float y { get; internal set; }
+            public float z { get; internal set; }
+            public float w { get; internal set; }
+            public Floor(Vector4 floorClipPlane) {
+                x = floorClipPlane.X;
+                y = floorClipPlane.Y;
+                z = floorClipPlane.Z;
+                w = floorClipPlane.W;
+
+            }
+            public double DistanceFrom(CameraSpacePoint point)
+            {
+                double numerator = x * point.X + y * point.Y + z * point.Z + w;
+                double denominator = Math.Sqrt(x * x + y * y + z * z);
+
+                Console.WriteLine(numerator / denominator);
+                return numerator / denominator;
+            }
+
+        }
+
 
         /// <summary>
         /// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
@@ -315,14 +344,33 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
+            double con;
             bool dataReceived = false;
             string message = "No Skeleton Data";
-            
+
+            float x1;
+            float y1;
+            float z1;
+            float w1;
+
 
             using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
             {
                 if (bodyFrame != null)
                 {
+                   
+
+
+                    Vector4 floorClipPlane = bodyFrame.FloorClipPlane;
+                     x1 = floorClipPlane.X;
+                     y1 = floorClipPlane.Y;
+                     z1 = floorClipPlane.Z;
+                     w1 = floorClipPlane.W;
+                    
+                    con = Math.Sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+
+                  
+
                     if (this.bodies == null)
                     {
                         this.bodies = new Body[bodyFrame.BodyCount];
@@ -333,6 +381,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     // those body objects will be re-used.
                     bodyFrame.GetAndRefreshBodyData(this.bodies);
                     dataReceived = true;
+                   
                 }
             }
             
@@ -368,7 +417,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     position.Z = InferredZPositionClamp;
                                 }
 
+                             
+
+                          
+
                                 var spine = body.Joints[JointType.SpineMid];
+
+
+                                
+
+
+
 
 
                                 DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
@@ -385,6 +444,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                          // position.Z);
                             }
 
+                           
+
 
 
 
@@ -397,8 +458,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                 }
+
             }
             TextH.Text = message;
+
+          
             
         }
 
@@ -486,6 +550,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     drawingContext.DrawEllipse(this.handClosedBrush, null, handPosition, HandSize, HandSize);
                     sta = "Alert: Close Hand"; // alert เมื่อกำมือ
                     Texts.Text = sta;
+                   
 
                     break;
 
