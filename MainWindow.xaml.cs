@@ -19,6 +19,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
     using System.Linq;
+    using System.Net;
 
 
     /// <summary>
@@ -577,7 +578,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     drawingContext.DrawEllipse(this.handClosedBrush, null, handPosition, HandSize, HandSize);
                     sta = "Alert: Close Hand"; // alert เมื่อกำมือ
                     Texts.Text = sta;
+
+                    string UTL = "http://localhost/line/index.php";
+                    WebClient client = new WebClient();
+                    client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+
+                    Stream data = client.OpenRead(UTL);
+                    StreamReader reader = new StreamReader(data);
+                    string s = reader.ReadToEnd();
                    
+                        this.Close();
+                    
+
 
                     break;
 
