@@ -136,8 +136,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private Body _body = null;
         public Vector4 FloorClipPlane { get; }
 
-       
 
+        int y = 0;
 
 
         /// <summary>
@@ -438,15 +438,36 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                         float Z = floorClipPlane.Z;
                                         float W = floorClipPlane.W;
 
-                                    CameraSpacePoint ee = joints[JointType.WristLeft].Position;
+                                    CameraSpacePoint ee = joints[JointType.Neck].Position;
 
                                     double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;                               
                                     double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
                                     double ans = numerator / denominator;
-                                    Console.WriteLine(ans);
+                                    double a = Math.Round(ans, 2);
+                                    Console.WriteLine(a);
+
+                                    /*  if (a <= 0.65 && a >= 0.55)
+                                      {
+                                          y++;
+                                      }
+                                      if (y==2000)
+                                      {
+                                          this.Close();
+                                      }
+                                      Console.WriteLine(y); ออกกำลังกาย */
+
+                            /*        if (a >= -1.43 && a < -1.03)
+                                    {
+                                        y++;
+                                    }
+                                    if (y == 2000)
+                                    {
+                                     //   this.Close();
+                                    }
+                                    Console.WriteLine(y); */
 
 
-                                    
+
 
 
 
@@ -579,14 +600,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     sta = "Alert: Close Hand"; // alert เมื่อกำมือ
                     Texts.Text = sta;
 
-                   string UTL = "http://localhost/line/index.php";
+                  /*string UTL = "http://localhost/line/index.php";
                    WebClient client = new WebClient();
                    client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
 
                   Stream data = client.OpenRead(UTL);
                     StreamReader reader = new StreamReader(data);
                    string s = reader.ReadToEnd();
-                        this.Close();
+                        this.Close(); */
 
                     break;
 
