@@ -7,6 +7,8 @@
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
     using System;
+    using System.Windows.Data;
+    using Microsoft.Kinect.Toolkit;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -16,6 +18,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Linq;
+    using System.Net;
+
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -25,12 +30,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Radius of drawn hand circles
         /// </summary>
-        private const double HandSize = 30;
+        private const double HandSize = 30; //ขนาดวงกลมของมือ ท้ังกำมือ และ แบมือ
 
         /// <summary>
         /// Thickness of drawn joint lines
         /// </summary>
-        private const double JointThickness = 3;
+         private const double JointThickness = 3; // ขนาดของตัวข้อต่อ
 
         /// <summary>
         /// Thickness of clip edge rectangles
@@ -127,6 +132,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         private string statusText = null;
 
+        private Floor _floor = null;
+        private Body _body = null;
+        public Vector4 FloorClipPlane { get; }
+
+
+        int y = 0;
+
+
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
@@ -152,38 +165,44 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.bones = new List<Tuple<JointType, JointType>>();
 
             // Torso
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
 
-            // Right Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
+                // Right Arm
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
 
-            // Left Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
+                // Left Arm
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
 
-            // Right Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
+                // Right Leg
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
 
-            // Left Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
+                // Left Leg
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
+                this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
+            //test
+
+
+           
+            //
+
 
             // populate body colors, one for each BodyIndex
             this.bodyColors = new List<Pen>();
@@ -194,29 +213,55 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.bodyColors.Add(new Pen(Brushes.Blue, 6));
             this.bodyColors.Add(new Pen(Brushes.Indigo, 6));
             this.bodyColors.Add(new Pen(Brushes.Violet, 6));
-
+            
             // set IsAvailableChanged event notifier
-            this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
+            this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged; 
 
             // open the sensor
             this.kinectSensor.Open();
 
             // set the status text
-            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
+            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText  // เช็คว่า kinect กำลัง online อยู่ไหม 
                                                             : Properties.Resources.NoSensorStatusText;
 
             // Create the drawing group we'll use for drawing
             this.drawingGroup = new DrawingGroup();
 
             // Create an image source that we can use in our image control
-            this.imageSource = new DrawingImage(this.drawingGroup);
+            this.imageSource = new DrawingImage(this.drawingGroup); //สร้าง รูปที่sensor ทำงาน แล้วคัดกรองให้เหลือแต่รูปโครงก้าง
 
             // use the window object as the view model in this simple example
             this.DataContext = this;
 
             // initialize the components (controls) of the window
-            this.InitializeComponent();
+            this.InitializeComponent(); //สร้างหน้าต่าง component 
+            
         }
+        public class Floor {
+            public float x { get; internal set; }
+            public float y { get; internal set; }
+            public float z { get; internal set; }
+            public float w { get; internal set; }
+
+            public Floor(Vector4 floorClipPlane) {
+                x = floorClipPlane.X;
+                y = floorClipPlane.Y;
+                z = floorClipPlane.Z;
+                w = floorClipPlane.W;
+
+            }
+            public double DistanceFrom(CameraSpacePoint point)
+            {
+                double numerator = x * point.X + y * point.Y + z * point.Z + w;
+                double denominator = Math.Sqrt(x * x + y * y + z * z);
+
+                Console.WriteLine(numerator / denominator);
+               
+                return numerator / denominator;
+            }
+
+        }
+
 
         /// <summary>
         /// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
@@ -233,6 +278,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 return this.imageSource;
             }
         }
+
 
         /// <summary>
         /// Gets or sets the current status text to display
@@ -253,7 +299,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     // notify any bound elements that the text has changed
                     if (this.PropertyChanged != null)
                     {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("StatusText"));
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("StatusText")); //สร้าง status ของการทำงาน kinect 
                     }
                 }
             }
@@ -270,6 +316,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 this.bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
             }
+            
+          
         }
 
         /// <summary>
@@ -292,7 +340,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.kinectSensor = null;
             }
         }
-
+      
         /// <summary>
         /// Handles the body frame data arriving from the sensor
         /// </summary>
@@ -300,12 +348,39 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
+            double con;
             bool dataReceived = false;
+            string message = "No Skeleton Data";
+
+            float x1;
+            float y1;
+            float z1;
+            float w1;
+            double aa;
+
 
             using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
             {
                 if (bodyFrame != null)
                 {
+                    Floor floor = new Floor(FloorClipPlane);
+
+
+                    //floor.DistanceFrom();
+                  
+
+                    Vector4 floorClipPlane = bodyFrame.FloorClipPlane;
+                     x1 = floorClipPlane.X;
+                     y1 = floorClipPlane.Y;
+                     z1 = floorClipPlane.Z;
+                     w1 = floorClipPlane.W;
+
+                    
+                    con = Math.Sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+                   
+                  
+                  
+
                     if (this.bodies == null)
                     {
                         this.bodies = new Body[bodyFrame.BodyCount];
@@ -316,56 +391,129 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     // those body objects will be re-used.
                     bodyFrame.GetAndRefreshBodyData(this.bodies);
                     dataReceived = true;
+                   
                 }
             }
 
+            
             if (dataReceived)
             {
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
-                    // Draw a transparent background to set the render size
-                    dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
-
-                    int penIndex = 0;
-                    foreach (Body body in this.bodies)
+                    using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
                     {
-                        Pen drawPen = this.bodyColors[penIndex++];
 
-                        if (body.IsTracked)
+
+                        // Draw a transparent background to set the render size
+                        dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+
+                        int penIndex = 0;
+                        foreach (Body body in this.bodies)
                         {
-                            this.DrawClippedEdges(body, dc);
+                            Pen drawPen = this.bodyColors[penIndex++];
 
-                            IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
-
-                            // convert the joint points to depth (display) space
-                            Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
-
-                            foreach (JointType jointType in joints.Keys)
+                            if (body.IsTracked)
                             {
-                                // sometimes the depth(Z) of an inferred joint may show as negative
-                                // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
-                                CameraSpacePoint position = joints[jointType].Position;
-                                if (position.Z < 0)
+                                this.DrawClippedEdges(body, dc);
+
+                                IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
+
+                                // convert the joint points to depth (display) space
+                                Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
+
+                                foreach (JointType jointType in joints.Keys)
                                 {
-                                    position.Z = InferredZPositionClamp;
+                                    // sometimes the depth(Z) of an inferred joint may show as negative
+                                    // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
+
+                                    CameraSpacePoint position = joints[jointType].Position;
+                                    if (position.Z < 0)
+                                    {
+                                        position.Z = InferredZPositionClamp;
+                                    }
+                                   
+                                        Vector4 floorClipPlane = bodyFrame.FloorClipPlane;
+                                        float X = floorClipPlane.X;
+                                        float Y = floorClipPlane.Y;
+                                        float Z = floorClipPlane.Z;
+                                        float W = floorClipPlane.W;
+
+                                    CameraSpacePoint ee = joints[JointType.Neck].Position;
+
+                                    double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;                               
+                                    double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
+                                    double ans = numerator / denominator;
+                                    double a = Math.Round(ans, 2);
+                                    Console.WriteLine(a);
+
+                                    /*  if (a <= 0.65 && a >= 0.55)
+                                      {
+                                          y++;
+                                      }
+                                      if (y==2000)
+                                      {
+                                          this.Close();
+                                      }
+                                      Console.WriteLine(y); ออกกำลังกาย */
+
+                            /*        if (a >= -1.43 && a < -1.03)
+                                    {
+                                        y++;
+                                    }
+                                    if (y == 2000)
+                                    {
+                                     //   this.Close();
+                                    }
+                                    Console.WriteLine(y); */
+
+
+
+
+
+
+
+                                    var spine = body.Joints[JointType.SpineMid];
+
+
+
+                                    DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
+                                    jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+
+                                    message = string.Format("SKelton: X:{0:0.0} Y:{1:0.0} Z:{2:0.0}",   // สร้าง postion บนร่างกาย ด้วย x,y,z 
+                                                                                                        //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
+                                                                                                        //this.bones.(new Tuple<JointType,JointType>(JointType.SpineBase , JointType.SpineBase)),
+                             spine.Position.X,
+                             spine.Position.Y,
+                             spine.Position.Z);
+                                    // position.X,
+                                    // position.Y,
+                                    // position.Z);
                                 }
 
-                                DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
-                                jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+
+
+
+
+
+
+                                this.DrawBody(joints, jointPoints, dc, drawPen);
+
+                                this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
+                                this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                             }
-
-                            this.DrawBody(joints, jointPoints, dc, drawPen);
-
-                            this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
-                            this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                         }
+                        // prevent drawing outside of our render area
+                        this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                     }
-
-                    // prevent drawing outside of our render area
-                    this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                 }
+
             }
+            TextH.Text = message;
+
+          
+            
         }
+       
 
         /// <summary>
         /// Draws a body
@@ -444,14 +592,29 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="drawingContext">drawing context to draw to</param>
         private void DrawHand(HandState handState, Point handPosition, DrawingContext drawingContext)
         {
+            string sta ;
             switch (handState)
             {
                 case HandState.Closed:
                     drawingContext.DrawEllipse(this.handClosedBrush, null, handPosition, HandSize, HandSize);
+                    sta = "Alert: Close Hand"; // alert เมื่อกำมือ
+                    Texts.Text = sta;
+
+                  /*string UTL = "http://localhost/line/index.php";
+                   WebClient client = new WebClient();
+                   client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+
+                  Stream data = client.OpenRead(UTL);
+                    StreamReader reader = new StreamReader(data);
+                   string s = reader.ReadToEnd();
+                        this.Close(); */
+
                     break;
 
                 case HandState.Open:
                     drawingContext.DrawEllipse(this.handOpenBrush, null, handPosition, HandSize, HandSize);
+                    sta = "Alert: Open Hand"; // alert เมื่อแบมือ
+                    Texts.Text = sta;
                     break;
 
                 case HandState.Lasso:
