@@ -55,6 +55,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 Console.WriteLine(" ");
                 
+
             }
 
         }
