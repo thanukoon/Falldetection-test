@@ -28,6 +28,7 @@
         <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}" Grid.ColumnSpan="2">
             <StatusBarItem Content="{Binding StatusText}" />
         </StatusBar>
-      
+        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,15,0,0"  Click="Button_Click"/>
+
     </Grid>
 </Window>

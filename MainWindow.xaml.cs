@@ -27,6 +27,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            test t2 = new test();
+            t2.save(floor);
+            
+        }
         /// <summary>
         /// Radius of drawn hand circles
         /// </summary>
@@ -136,9 +142,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private Body _body = null;
         public Vector4 FloorClipPlane { get; }
 
+        public int i = 0;
 
         int y = 0;
-
+        public double[] floor;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -445,6 +452,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     double ans = numerator / denominator;
                                     double a = Math.Round(ans, 2);
                                     Console.WriteLine(a);
+                                    floor[i] = a;
+                                   
 
                                     /*  if (a <= 0.65 && a >= 0.55)
                                       {
@@ -491,7 +500,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                 }
 
 
-
+                                //Console.WriteLine(i);
+                                i++;
 
 
 
