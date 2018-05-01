@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -23,13 +26,30 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             InitializeComponent();
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            NN t1 = new NN();
-            t1.yes();
+            please.Text = "Please Wait";
+
+            progress.IsIndeterminate = true;
+            await LoadData();
+            
+
             MainWindow c2 = new MainWindow();
             c2.Show();
             this.Close();
+
+        }
+
+        private async Task LoadData()
+        {
+            await Task.Run(() =>
+            {
+               
+                NN t1 = new NN();
+                t1.yes();
+                Thread.Sleep(2000);
+            });
+           
 
         }
     }

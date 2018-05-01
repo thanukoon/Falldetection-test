@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class Helpers
     {
+
+       
+
 
         public static void GenerateDataSets(List<double[]> data, out List<double[]> trainData, out List<double[]> testData, double ratio)
         {
@@ -44,12 +48,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             for (int i = 0; i < vector.Length; ++i)
             {
+
                 if (i % valsPerRow == 0)
 
                     Console.WriteLine("");
                 Console.Write(vector[i].ToString("F" + decimals).PadLeft(decimals + 4) + " ");
                 a[i] = vector[i];
 
+                
             }
             if (newLine == true)
             {
