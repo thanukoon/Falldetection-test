@@ -20,6 +20,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using Microsoft.Kinect;
     using System.Linq;
     using System.Net;
+    using System.Collections;
 
 
     /// <summary>
@@ -30,9 +31,28 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             test t2 = new test();
-            t2.save(floor);
+            Console.WriteLine("");
+        /*    foreach (object list2 in list1)
+            {
+                Console.WriteLine(list2);
+               
+            } */
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
+            {
+                foreach (object list3 in list1)
+                {
+                    writer.WriteLine(list3);
+                }
+            }
+
+            t2.save(list1);
+
+            this.Close();
             
         }
+        //List<double> list1 = new List<double>();
+        ArrayList list1 = new ArrayList();
+      
         /// <summary>
         /// Radius of drawn hand circles
         /// </summary>
@@ -143,9 +163,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public Vector4 FloorClipPlane { get; }
 
         public int i = 0;
-
+        double a;
         int y = 0;
-        public double[] floor;
+       // public double[] floor;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -355,15 +375,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
-            double con;
+           
+        double con;
             bool dataReceived = false;
             string message = "No Skeleton Data";
-
-            float x1;
+             
+        float x1;
             float y1;
             float z1;
             float w1;
             double aa;
+           
 
 
             using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
@@ -405,18 +427,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             if (dataReceived)
             {
+
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
                     using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
                     {
+                        
 
-
-                        // Draw a transparent background to set the render size
-                        dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                                         // Draw a transparent background to set the render size
+                         dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
                         int penIndex = 0;
+
                         foreach (Body body in this.bodies)
                         {
+                           
                             Pen drawPen = this.bodyColors[penIndex++];
 
                             if (body.IsTracked)
@@ -430,6 +455,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                                 foreach (JointType jointType in joints.Keys)
                                 {
+
+
                                     // sometimes the depth(Z) of an inferred joint may show as negative
                                     // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
 
@@ -444,17 +471,26 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     float Y = floorClipPlane.Y;
                                     float Z = floorClipPlane.Z;
                                     float W = floorClipPlane.W;
-
+                                    
                                     CameraSpacePoint ee = joints[JointType.Neck].Position;
 
                                     double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;
                                     double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
                                     double ans = numerator / denominator;
-                                    double a = Math.Round(ans, 2);
-                                    Console.WriteLine(a);
-                                    floor[i] = a;
-                                   
+                                   a = Math.Round(ans, 2);
+                                  //  Console.WriteLine(a);
+                                 
+                                    if (a!=null)
+                                    {
 
+
+                                        list1.Add(a);
+                                      //  Console.WriteLine(a);
+                                        
+                                    } 
+                                    //  floor1[i] = a;
+
+                                    //floor[i] = a;
                                     /*  if (a <= 0.65 && a >= 0.55)
                                       {
                                           y++;
@@ -497,29 +533,32 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     // position.X,
                                     // position.Y,
                                     // position.Z);
+                                    
                                 }
 
+                                
 
                                 //Console.WriteLine(i);
                                 i++;
 
-
-
+                                
 
                                 this.DrawBody(joints, jointPoints, dc, drawPen);
 
                                 this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                                 this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
+                                
                             }
                         }
                         // prevent drawing outside of our render area
                         this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                      
                     }
                 }
 
             }
             TextH.Text = message;
-
+           
 
 
         }

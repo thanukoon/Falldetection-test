@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,14 +10,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class test
     {
-        public  void save(Array arr)
+        public  void save(ArrayList list1)
         {
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter("E:\\data.csv"))
-            {
-                file.Write(string.Join(",", arr));
+           
+                
                 Console.WriteLine("save complete");
-            }
+
             
+
         }
 
     }
