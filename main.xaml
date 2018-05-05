@@ -5,14 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Microsoft.Samples.Kinect.BodyBasics"
         mc:Ignorable="d"
-        Title="main" Height="300" Width="300">
+        Title="FALL-DETECTION" Height="300" Width="300">
     <Grid>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="C:\Users\Goon\Desktop\sppj2\Falldetection-test\Images\fall.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
 
         <Button Content="BEGIN" HorizontalAlignment="Left" Margin="98,136,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Background="#FF86E0D8"/>
         <ProgressBar HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="143" Margin="70,209,0,0" Name="progress" IsIndeterminate="False"  >
 
         </ProgressBar>
-        <TextBlock Name="please" Text="" FontSize="12" HorizontalAlignment="Left" Margin="110,187,0,58" Width="65"/>
-
+        <TextBlock Name="please" Text=" " FontSize="12" HorizontalAlignment="Left" Margin="110,191,0,54" Width="65" Foreground="Red" />
+        
     </Grid>
 </Window>

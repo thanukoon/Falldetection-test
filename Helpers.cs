@@ -46,6 +46,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public static void ShowVector(double[] vector, int valsPerRow, int decimals, bool newLine)
         {
            double[] a = vector;
+           bool c ;
+            //double d = 7.2;
             
             ArrayList listnn = new ArrayList();
             
@@ -56,7 +58,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                     Console.WriteLine("");
                 Console.Write(vector[i].ToString("F" + decimals).PadLeft(decimals + 4) + " ");
-                a[i] =Math.Round (vector[i],3);
+                a[i] =Math.Round (vector[i],1);
                
                
 
@@ -70,19 +72,32 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     foreach (object list4 in a)
                     {
                         writer.WriteLine(list4);
-                       Console.WriteLine(list4);
+                     //  Console.WriteLine(list4);
                        
                     }
                    
                 }
-             /*   listnn.AddRange(a);
+                
+           /*     listnn.AddRange(a);                       ลองเช็คด้วยbinsearch 
                 listnn.Sort();
                 foreach (object data in  listnn)
                 {
                     Console.WriteLine(data);
                 }
+                int b = listnn.BinarySearch(7.2);
+                c = Convert.ToBoolean(b);
+                if (b>0)
+                {
 
-                Console.WriteLine("indx1" + listnn.BinarySearch(0.75)); */
+                    if (c)
+                        Console.WriteLine(c);
+
+                }
+                else
+                {
+                    Console.WriteLine("False");
+                }*/
+              
               
 
 
