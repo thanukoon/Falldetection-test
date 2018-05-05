@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -60,7 +61,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (newLine == true)
             {
                 Console.WriteLine(" ");
-                
+
+                using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\NN.csv"))
+                {
+                    foreach (object list4 in a)
+                    {
+                        writer.WriteLine(list4);
+                        Console.WriteLine(list4);
+                    }
+                }
+
+               
 
 
             }
