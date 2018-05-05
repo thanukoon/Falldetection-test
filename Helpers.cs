@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
+using System.Collections;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class Helpers
     {
+        
 
-       
 
 
         public static void GenerateDataSets(List<double[]> data, out List<double[]> trainData, out List<double[]> testData, double ratio)
@@ -45,8 +46,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public static void ShowVector(double[] vector, int valsPerRow, int decimals, bool newLine)
         {
            double[] a = vector;
-         
-
+            
+            ArrayList listnn = new ArrayList();
+            
             for (int i = 0; i < vector.Length; ++i)
             {
 
@@ -54,9 +56,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                     Console.WriteLine("");
                 Console.Write(vector[i].ToString("F" + decimals).PadLeft(decimals + 4) + " ");
-                a[i] = vector[i];
+                a[i] =Math.Round (vector[i],3);
+               
+               
 
-                
             }
             if (newLine == true)
             {
@@ -67,11 +70,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     foreach (object list4 in a)
                     {
                         writer.WriteLine(list4);
-                        Console.WriteLine(list4);
+                       Console.WriteLine(list4);
+                       
                     }
+                   
+                }
+             /*   listnn.AddRange(a);
+                listnn.Sort();
+                foreach (object data in  listnn)
+                {
+                    Console.WriteLine(data);
                 }
 
-               
+                Console.WriteLine("indx1" + listnn.BinarySearch(0.75)); */
+              
+
+
 
 
             }
