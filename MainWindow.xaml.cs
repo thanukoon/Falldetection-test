@@ -43,6 +43,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 {
                     writer.WriteLine(list3);
                 }
+
             }
 
             t2.save(list1);
