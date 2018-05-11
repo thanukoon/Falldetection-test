@@ -9,12 +9,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class NN
     {
-        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "testnn2.csv"); //breast-cancer-wisconsin
+        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "fall1.csv"); //breast-cancer-wisconsin
        // private static readonly string scource = 
         // Number of input neurons, hidden neurons and output neurons
-        private static readonly int[] inputColumns = { 0, 1, 2, 3, 4, 5, 6, 7, 8 }; // ไว้เพิ่มcolumn
+        private static readonly int[] inputColumns = { 0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52,53,54 }; // ไว้เพิ่มcolumn
         private static readonly int numInput = inputColumns.Length;
-        private const int numHidden = 7; 
+        private const int numHidden = 20; 
         private const int numOutput = 2;
 
         // Parameters for NN training

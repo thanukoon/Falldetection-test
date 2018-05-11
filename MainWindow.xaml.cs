@@ -32,27 +32,30 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             test t2 = new test();
             Console.WriteLine("");
-        /*    foreach (object list2 in list1)
-            {
-                Console.WriteLine(list2);
-               
-            } */
+            /*    foreach (object list2 in list1)
+                {
+                    Console.WriteLine(list2);
+
+                } */
+            list1 = list1.Distinct().ToList();
+           
             using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
             {
                 foreach (object list3 in list1)
                 {
                     writer.WriteLine(list3);
                 }
+                
 
             }
 
-            t2.save(list1);
-
-            this.Close();
+           t2.save(list1);
+            list1.Clear();
+          // this.Close();
             
         }
-        //List<double> list1 = new List<double>();
-        ArrayList list1 = new ArrayList();
+        List<double> list1 = new List<double>();
+       // ArrayList list1 = new ArrayList();
       
         /// <summary>
         /// Radius of drawn hand circles
@@ -478,17 +481,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;
                                     double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
                                     double ans = numerator / denominator;
-                                   a = Math.Round(ans, 2);
+                                   a = Math.Round(ans, 3);
                                   //  Console.WriteLine(a);
                                  
-                                    if (a!=null)
-                                    {
-
+                                  
 
                                         list1.Add(a);
                                       //  Console.WriteLine(a);
                                         
-                                    } 
+                                    
                                     //  floor1[i] = a;
 
                                     //floor[i] = a;
