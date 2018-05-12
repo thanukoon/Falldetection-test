@@ -8,15 +8,14 @@
         Title="FALL-DETECTION" Height="300" Width="300">
     <Grid>
 
-        <Grid.Background>
-            <ImageBrush ImageSource="C:\Users\Goon\Desktop\sppj2\Falldetection-test\Images\fall.jpg" Stretch="UniformToFill"/>
-        </Grid.Background>
+        <Image Source="C:\Users\Goon\Desktop\sppj2\Falldetection-test\Images\cis.png" Margin="16,0,26,132"/>
 
-        <Button Content="BEGIN" HorizontalAlignment="Left" Margin="98,136,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Background="#FF86E0D8"/>
-        <ProgressBar HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="143" Margin="70,209,0,0" Name="progress" IsIndeterminate="False"  >
+        <TextBlock  Text="Auto-Fall Detection System " FontSize="12" HorizontalAlignment="Left" Margin="73,143,-63,102" Width="282" Foreground="Black" />
+        <TextBlock  Text="Using  KINECT Camera" FontSize="12" HorizontalAlignment="Left" Margin="86,162,-76,83" Width="282" Foreground="Black" />
 
-        </ProgressBar>
-        <TextBlock Name="please" Text=" " FontSize="12" HorizontalAlignment="Left" Margin="110,191,0,54" Width="65" Foreground="Red" />
-        
+        <Button Content="BEGIN" HorizontalAlignment="Left" Margin="100,192,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <ProgressBar HorizontalAlignment="Left" Height="12" Margin="83,228,0,0" VerticalAlignment="Top" Width="123" Name="progress" IsIndeterminate="False"/>
+        <TextBlock Name="please" Text=" " FontSize="12" HorizontalAlignment="Left" Margin="110,212,0,33" Width="65" Foreground="Red" />
+
     </Grid>
 </Window>
