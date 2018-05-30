@@ -45,11 +45,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 {
                     writer.WriteLine(list3);
                 }
-                
+              
 
             }
-
-           t2.save(list1);
+           
+            t2.save(list1);
+            this.Close();
             list1.Clear();
           // this.Close();
             
@@ -383,6 +384,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         double con;
             bool dataReceived = false;
             string message = "No Skeleton Data";
+
+       
              
         float x1;
             float y1;
@@ -476,7 +479,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     float Z = floorClipPlane.Z;
                                     float W = floorClipPlane.W;
                                     
-                                    CameraSpacePoint ee = joints[JointType.Neck].Position;
+                                    CameraSpacePoint ee = joints[JointType.WristLeft].Position;
 
                                     double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;
                                     double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);

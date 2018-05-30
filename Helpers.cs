@@ -67,16 +67,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 Console.WriteLine(" ");
 
-                using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\NN.csv"))
-                {
-                    foreach (object list4 in a)
-                    {
-                        writer.WriteLine(list4);
-                     //  Console.WriteLine(list4);
-                       
-                    }
-                   
-                }
+               
                 
            /*     listnn.AddRange(a);                       ลองเช็คด้วยbinsearch 
                 listnn.Sort();

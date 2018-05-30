@@ -16,9 +16,9 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-       
-      
-        <TextBlock Name="TextH" Text="Postinion" FontSize="15" HorizontalAlignment="Right" Margin="0,18,14,22" Width="177" Grid.Column="1"/>
+
+
+        <TextBlock Name="TextH" Text="Position" FontSize="15" HorizontalAlignment="Right" Margin="0,18,14,22" Width="177" Grid.Column="1"/>
         <TextBlock Name="Texts" Text="Alert" FontSize="15" HorizontalAlignment="Left" Margin="159,10,0,30" Width="177"  Grid.Column="1"/>
 
         <Viewbox Grid.Row="1" HorizontalAlignment="Center">
