@@ -18,7 +18,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private const int numOutput = 2;
 
         // Parameters for NN training
-        private const int maxEpochs = 2000;
+        private const int maxEpochs = 1000;
         private const double learnRate = 0.05;
         private const double momentum = 0.01;
         private const double weightDecay = 0.0001;

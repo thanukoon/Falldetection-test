@@ -10,10 +10,10 @@
 
         <Image Source="C:\Users\Goon\Desktop\sppj2\Falldetection-test\Images\cis.png" Margin="-55,30,204,110"/>
         <Image Source="c:\Users\Goon\Desktop\sppj2\Falldetection-test\Images\stri.jpg" Margin="160,9,-48,110"/>
-        <TextBlock  Text="Auto-Fall Detection System " FontSize="12" HorizontalAlignment="Left" Margin="183,239,0,6" Width="282" Foreground="Black" />
-        <TextBlock  Text="Using  KINECT Camera" FontSize="12" HorizontalAlignment="Left" Margin="197,253,0,-8" Width="282" Foreground="Black" />
+        <TextBlock  Text="Auto-Fall Detection System " FontSize="14" HorizontalAlignment="Left" Margin="183,239,0,6" Width="282" Foreground="Black" />
+        <TextBlock  Text="Using  KINECT Camera" FontSize="14" HorizontalAlignment="Left" Margin="197,253,0,-8" Width="282" Foreground="Black" />
 
-        <Button Content="BEGIN" HorizontalAlignment="Left" Margin="220,276,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="BEGIN" HorizontalAlignment="Left" Margin="222,276,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <ProgressBar HorizontalAlignment="Left" Height="12" Margin="197,318,0,0" VerticalAlignment="Top" Width="123" Name="progress" IsIndeterminate="False"/>
         <TextBlock Name="please" Text=" " FontSize="12" HorizontalAlignment="Left" Margin="228,302,0,-57" Width="66" Foreground="Red" />
 
