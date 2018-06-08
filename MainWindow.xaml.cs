@@ -21,6 +21,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Linq;
     using System.Net;
     using System.Collections;
+    using System.Timers;
+    using System.Windows.Threading;
 
 
     /// <summary>
@@ -28,32 +30,61 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public int intime=6;
+        List<double> list2 = new List<double>();
+        DispatcherTimer dt = new DispatcherTimer();
+
+        private void dtTicker(object sender, EventArgs e)
+        {
+            list2.Add(a);
+            intime--;
+            time.Text = intime.ToString();
+           
+             Console.WriteLine(intime);
+            if (intime == 1)
+            {
+                foreach (var ti in list2)
+                {
+                    Console.WriteLine(ti);
+                }
+                /// save to csv here
+                this.Close();
+            }
+           
+        }
+
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             test t2 = new test();
-            Console.WriteLine("");
-            /*    foreach (object list2 in list1)
-                {
-                    Console.WriteLine(list2);
+            dt.Interval = TimeSpan.FromSeconds(1);
+            dt.Tick += dtTicker;
+            dt.Start();
 
-                } */
-            list1 = list1.Distinct().ToList();
-           
-            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
-            {
-                foreach (object list3 in list1)
-                {
-                    writer.WriteLine(list3);
-                }
-              
+            /*  /*    foreach (object list2 in list1)
+                  {
+                      Console.WriteLine(list2);
 
-            }
+
+                  } */
+            //   list1 = list1.Distinct().ToList();
+
+            /* using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
+             {
+                 foreach (object list3 in list1)
+                 {
+                     writer.WriteLine(list3);
+                 }
+
+
+             } 
            
-            t2.save(list1);
+           
+           t2.save(list1);
             this.Close();
-            list1.Clear();
-          // this.Close();
-            
+           list1.Clear();
+          this.Close();*/
+
         }
         List<double> list1 = new List<double>();
        // ArrayList list1 = new ArrayList();
@@ -232,7 +263,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //test
 
 
-
+            
             //
 
 
@@ -485,9 +516,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
                                     double ans = numerator / denominator;
                                    a = Math.Round(ans, 3);
-                                  //  Console.WriteLine(a);
-                                 
-                                  
+                                    //  Console.WriteLine(a);
+                                
+                                
 
                                         list1.Add(a);
                                       //  Console.WriteLine(a);

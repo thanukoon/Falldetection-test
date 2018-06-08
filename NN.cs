@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -18,14 +19,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private const int numOutput = 2;
 
         // Parameters for NN training
-        private const int maxEpochs = 1000;
+        private const int maxEpochs = 300;
         private const double learnRate = 0.05;
         private const double momentum = 0.01;
         private const double weightDecay = 0.0001;
         
+       
 
-       public void yes ()
+
+        public void yes ()
         {
+
+           
             Console.WriteLine("Neural Network Demo using .NET by Sebastian Brandes");
             Console.WriteLine("Data Set: Breast Cancer Wisconsin (Diagnostic), November 1995");
             // Source: http://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/
@@ -102,7 +107,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //Console.ResetColor();
             //Console.WriteLine(nn.ToString());
             #endregion
-
+        
            
         }
     }

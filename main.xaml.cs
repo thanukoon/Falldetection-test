@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Threading;
+using System.Timers;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -44,10 +45,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             await Task.Run(() =>
             {
-               
+              
                 NN t1 = new NN();
                 t1.yes();
                 Thread.Sleep(2000);
+                
+             
             });
            
 
