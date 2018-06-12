@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
+
+
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class NN
@@ -17,12 +19,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private static readonly int numInput = inputColumns.Length;
         private const int numHidden = 20; 
         private const int numOutput = 2;
-
+        
         // Parameters for NN training
         private const int maxEpochs = 300;
         private const double learnRate = 0.05;
         private const double momentum = 0.01;
         private const double weightDecay = 0.0001;
+        
         
        
 
@@ -30,6 +33,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public void yes ()
         {
 
+         
            
             Console.WriteLine("Neural Network Demo using .NET by Sebastian Brandes");
             Console.WriteLine("Data Set: Breast Cancer Wisconsin (Diagnostic), November 1995");
@@ -40,17 +44,37 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Console.WriteLine("Loading source file and generating data sets...");
             var rows = File.ReadAllLines(sourceFile);
             var data = new List<double[]>();
-
+         
             foreach (var row in rows)
             {
+
+                //Console.WriteLine(row);
                 var values = row.Split(',');
-                var observation = new double[values.Length];
+
+          //      var values = row.Split(new[]{ ',', '"'} ,StringSplitOptions.RemoveEmptyEntries );  split ตัวที่มีเครื่องหมาย , กับ " ออก 
+
+               //    var valu = row.Split('"');
+
+               //Console.WriteLine(values);
+
+
+               var observation = new double[values.Length];
+               
                 for (int i = 0; i < values.Length; i++)
                 {
+                  
                     double.TryParse(values[i], out observation[i]);
+
+                 
+                      Console.WriteLine(values[i]);
+
                 }
                 data.Add(observation);
+
             }
+           
+         
+
 
             List<double[]> trainData;
             List<double[]> testData;
