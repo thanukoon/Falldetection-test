@@ -87,6 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="cal.cs" />
     <Compile Include="test.cs" />
     <Page Include="main.xaml">
       <SubType>Designer</SubType>

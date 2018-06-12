@@ -23,6 +23,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Collections;
     using System.Timers;
     using System.Windows.Threading;
+    using System.Threading;
+    using System.Threading.Tasks;
+
 
 
     /// <summary>
@@ -33,26 +36,55 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public int intime=6;
         List<double> list2 = new List<double>();
         DispatcherTimer dt = new DispatcherTimer();
+     
+       double numerator;
+      double denominator;
+      double ans;
+        double ans2;
+        cal cal = new cal();
+        double anshead;
+        double ansspinebase;
+
+      
 
         private void dtTicker(object sender, EventArgs e)
         {
-            list2.Add(a);
+            //  list2.Add(a);
+            listhead.Add(anshead);
+            listspinebase.Add(ansspinebase);
             intime--;
             time.Text = intime.ToString();
            
              Console.WriteLine(intime);
             if (intime == 1)
             {
-                foreach (var ti in list2)
+                using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\head.csv"))
                 {
-                    Console.WriteLine(ti);
+                    foreach (object list3 in listhead )
+                    {
+                        writer.WriteLine(list3);
+                    }
+
+
                 }
-                /// save to csv here
+                using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\spinebase.csv"))
+                {
+                    foreach (object list4 in listspinebase)
+                    {
+                        writer.WriteLine(list4);
+                    }
+
+
+                }
+
+
+
                 this.Close();
             }
            
         }
 
+        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -86,9 +118,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
           this.Close();*/
 
         }
-        List<double> list1 = new List<double>();
-       // ArrayList list1 = new ArrayList();
-      
+        List<double> listhead = new List<double>();
+        List<double> listspinebase = new List<double>();
+        //List<double> list1 = new List<double>();
+        // ArrayList list1 = new ArrayList();
+
         /// <summary>
         /// Radius of drawn hand circles
         /// </summary>
@@ -510,32 +544,88 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     float Z = floorClipPlane.Z;
                                     float W = floorClipPlane.W;
                                     
-                                    CameraSpacePoint ee = joints[JointType.WristLeft].Position;
+                                  //  CameraSpacePoint ee = joints[JointType.WristLeft].Position;
+                                  /*  CameraSpacePoint ankleft = joints[JointType.AnkleLeft].Position;
+                                    CameraSpacePoint ankright = joints[JointType.AnkleRight].Position;
+                                    CameraSpacePoint elbowleft = joints[JointType.ElbowLeft].Position;
+                                    CameraSpacePoint elbowright = joints[JointType.ElbowRight].Position;
+                                    CameraSpacePoint footleft = joints[JointType.FootLeft].Position;
+                                    CameraSpacePoint footright = joints[JointType.FootRight].Position;
+                                    CameraSpacePoint haneleft = joints[JointType.HandLeft].Position;
+                                    CameraSpacePoint handright = joints[JointType.HandRight].Position;
+                                    CameraSpacePoint handtipleft = joints[JointType.HandTipLeft].Position;
+                                    CameraSpacePoint handtipright = joints[JointType.HandTipRight].Position;*/
+                                    CameraSpacePoint head = joints[JointType.Head].Position;
+                             /*       CameraSpacePoint hipleft = joints[JointType.HipLeft].Position;
+                                    CameraSpacePoint hipright = joints[JointType.HipRight].Position;
+                                    CameraSpacePoint kneeleft = joints[JointType.KneeLeft].Position;
+                                    CameraSpacePoint kneeright = joints[JointType.KneeRight].Position;
+                                    CameraSpacePoint neck = joints[JointType.Neck].Position;
+                                    CameraSpacePoint shoulderleft = joints[JointType.ShoulderLeft].Position;
+                                    CameraSpacePoint shouluderright = joints[JointType.ShoulderRight].Position; */
+                                    CameraSpacePoint spinebase = joints[JointType.SpineBase].Position;
+                               /*     CameraSpacePoint spinemid = joints[JointType.SpineMid].Position;
+                                    CameraSpacePoint spineshoulder = joints[JointType.SpineShoulder].Position;
+                                    CameraSpacePoint thumbleft = joints[JointType.ThumbLeft].Position;
+                                    CameraSpacePoint  thumbright = joints[JointType.ThumbRight].Position;
+                                    CameraSpacePoint wristleft = joints[JointType.WristLeft].Position;
+                                    CameraSpacePoint wristright = joints[JointType.WristRight].Position; */
 
-                                    double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;
-                                    double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
-                                    double ans = numerator / denominator;
-                                   a = Math.Round(ans, 3);
-                                    //  Console.WriteLine(a);
-                                
-                                
+                                    cal.calu(X,Y,Z,W);
+                                  ans =cal.num(head);
+                                    try
+                                    {
+                                        Parallel.Invoke(() =>
+                                        {
+                                            double numnumeratorhead = X * head.X + Y * head.Y + Z * head.Z + W;
+                                            double numnumeratorspinebase = X * spinebase.X + Y * spinebase.Y + Z * spinebase.Z + W;
+                                            double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
+                                            anshead = Math.Round(numnumeratorhead/denominator , 3);
+                                            ansspinebase = Math.Round(numnumeratorspinebase/denominator , 3);
 
-                                        list1.Add(a);
-                                      //  Console.WriteLine(a);
-                                        
-                                    
-                                    //  floor1[i] = a;
 
-                                    //floor[i] = a;
-                                    /*  if (a <= 0.65 && a >= 0.55)
-                                      {
-                                          y++;
-                                      }
-                                      if (y==2000)
-                                      {
-                                          this.Close();
-                                      }
-                                      Console.WriteLine(y); ออกกำลังกาย */
+                                        }
+
+
+                                            );
+                                    }
+                                    catch(AggregateException a)
+                                    {
+                                        Console.WriteLine(a);
+                                    }
+                                    Console.WriteLine(anshead);
+                                   
+
+
+                              //      numerator = X * ankleft.X + Y * ankleft.Y + Z * ankleft.Z + W;
+                               //     denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
+                                //    a = Math.Round(numerator / denominator , 3);
+
+
+                                    /*     double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;
+                                         double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
+                                         double ans = numerator / denominator;
+                                        a = Math.Round(ans, 3);
+                                         //  Console.WriteLine(a);
+
+
+
+                                             list1.Add(a);
+                                           //  Console.WriteLine(a);
+
+
+                                         //  floor1[i] = a;
+
+                                         //floor[i] = a;
+                                         /*  if (a <= 0.65 && a >= 0.55)
+                                           {
+                                               y++;
+                                           }
+                                           if (y==2000)
+                                           {
+                                               this.Close();
+                                           }
+                                           Console.WriteLine(y); ออกกำลังกาย */
 
                                     /*        if (a >= -1.43 && a < -1.03)
                                             {
