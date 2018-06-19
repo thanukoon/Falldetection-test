@@ -33,7 +33,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public int intime=6;
+        public int intime=4;
+        public int timer = 0;
         List<double> list2 = new List<double>();
         DispatcherTimer dt = new DispatcherTimer();
      
@@ -41,7 +42,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
       double denominator;
       double ans;
         double ans2;
-        cal cal = new cal();
+      
         double anshead;
         double ansspinebase;
 
@@ -50,36 +51,47 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void dtTicker(object sender, EventArgs e)
         {
             //  list2.Add(a);
-            listhead.Add(anshead);
-            listspinebase.Add(ansspinebase);
+           
             intime--;
+            timer++;
             time.Text = intime.ToString();
+            //Console.WriteLine(timer);
            
              Console.WriteLine(intime);
             if (intime == 1)
             {
-                using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\head.csv"))
+            /*    using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\head.csv"))
                 {
-                    foreach (object list3 in listhead )
+                    foreach (object it in listhead )
                     {
-                        writer.WriteLine(list3);
+                        writer.WriteLine(it);
+                        var ti = String.Format("first , sec" +listhead,listspinebase);
                     }
 
 
                 }
                 using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\spinebase.csv"))
                 {
-                    foreach (object list4 in listspinebase)
+                    foreach (object it in listspinebase)
                     {
-                        writer.WriteLine(list4);
+                        writer.WriteLine(it);
                     }
 
 
+                }*/
+                using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
+                {
+                    for(int i = 0; i < listhead.Count; i++)
+                    {
+                        var it = listhead[i].ToString();
+                        var it2 = listspinebase[i].ToString();
+                        writer.WriteLine(it+","+it2);
+                    }
                 }
 
 
 
-                this.Close();
+                    this.Close();
             }
            
         }
@@ -88,10 +100,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            
             test t2 = new test();
-            dt.Interval = TimeSpan.FromSeconds(1);
+            dt.Interval = TimeSpan.FromSeconds(0.5);
             dt.Tick += dtTicker;
+        //    Console.WriteLine(timer);
             dt.Start();
+            
 
             /*  /*    foreach (object list2 in list1)
                   {
@@ -99,7 +114,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
 
                   } */
-            //   list1 = list1.Distinct().ToList();
+            //  list1 = list1.Distinct().ToList();
 
             /* using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
              {
@@ -571,17 +586,25 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     CameraSpacePoint wristleft = joints[JointType.WristLeft].Position;
                                     CameraSpacePoint wristright = joints[JointType.WristRight].Position; */
 
-                                    cal.calu(X,Y,Z,W);
-                                  ans =cal.num(head);
+                                   
+                              
                                     try
                                     {
+                                        if (intime<6)
+                                        {
+                                          //  timer++;
+                                            listhead.Add(anshead);
+                                            listspinebase.Add(ansspinebase);
+
+                                        }
                                         Parallel.Invoke(() =>
                                         {
                                             double numnumeratorhead = X * head.X + Y * head.Y + Z * head.Z + W;
                                             double numnumeratorspinebase = X * spinebase.X + Y * spinebase.Y + Z * spinebase.Z + W;
                                             double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
-                                            anshead = Math.Round(numnumeratorhead/denominator , 3);
-                                            ansspinebase = Math.Round(numnumeratorspinebase/denominator , 3);
+                                              anshead = Math.Round(numnumeratorhead/denominator , 3);
+                                               ansspinebase = Math.Round(numnumeratorspinebase/denominator , 3);
+                                            
 
 
                                         }
@@ -593,7 +616,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     {
                                         Console.WriteLine(a);
                                     }
-                                    Console.WriteLine(anshead);
+                                   
                                    
 
 
@@ -637,7 +660,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                             }
                                             Console.WriteLine(y); */
 
-
+                                  
 
 
 
@@ -795,6 +818,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 case HandState.Lasso:
                     drawingContext.DrawEllipse(this.handLassoBrush, null, handPosition, HandSize, HandSize);
                     break;
+                
             }
         }
 
