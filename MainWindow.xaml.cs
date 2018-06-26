@@ -28,25 +28,30 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
 
 
-    /// <summary>
+    ///// <summary>
     /// Interaction logic for MainWindow
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public int intime=4;
+        public int intime=6;
         public int timer = 0;
         List<double> list2 = new List<double>();
         DispatcherTimer dt = new DispatcherTimer();
-     
-       double numerator;
-      double denominator;
+        DispatcherTimer dt2 = new DispatcherTimer();
+
+        double numerator;
+   
       double ans;
         double ans2;
       
         double anshead;
         double ansspinebase;
+        double numnumeratorhead;
+        double numnumeratorspinebase ;
+        double denominator;
 
-      
+
+
 
         private void dtTicker(object sender, EventArgs e)
         {
@@ -58,7 +63,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //Console.WriteLine(timer);
            
              Console.WriteLine(intime);
-            if (intime == 1)
+            if (intime == 0)
             {
             /*    using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\head.csv"))
                 {
@@ -96,16 +101,51 @@ namespace Microsoft.Samples.Kinect.BodyBasics
            
         }
 
-        
+        private void dataTicker(object sender, EventArgs e)
+        {
+            try
+            {
+
+                Parallel.Invoke(() =>
+                {
+
+                    anshead = Math.Round(numnumeratorhead / denominator, 3);
+                    ansspinebase = Math.Round(numnumeratorspinebase / denominator, 3);
+
+
+
+                });
+                if (intime < 6)
+                {
+                    //  timer++;
+                    listhead.Add(anshead);
+                    listspinebase.Add(ansspinebase);
+
+                    Console.WriteLine(anshead);
+                    Console.WriteLine(ansspinebase);
+
+                }
+            }
+            catch (AggregateException a)
+            {
+                Console.WriteLine(a);
+            }
+        }
+
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             
             test t2 = new test();
-            dt.Interval = TimeSpan.FromSeconds(0.5);
+            dt.Interval = TimeSpan.FromSeconds(1);
             dt.Tick += dtTicker;
         //    Console.WriteLine(timer);
             dt.Start();
+
+            dt2.Interval = TimeSpan.FromSeconds(0.05);
+            dt2.Tick += dataTicker;
+            dt2.Start();
             
 
             /*  /*    foreach (object list2 in list1)
@@ -133,6 +173,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
           this.Close();*/
 
         }
+
         List<double> listhead = new List<double>();
         List<double> listspinebase = new List<double>();
         //List<double> list1 = new List<double>();
@@ -558,6 +599,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     float Y = floorClipPlane.Y;
                                     float Z = floorClipPlane.Z;
                                     float W = floorClipPlane.W;
+
+
                                     
                                   //  CameraSpacePoint ee = joints[JointType.WristLeft].Position;
                                   /*  CameraSpacePoint ankleft = joints[JointType.AnkleLeft].Position;
@@ -579,50 +622,52 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     CameraSpacePoint shoulderleft = joints[JointType.ShoulderLeft].Position;
                                     CameraSpacePoint shouluderright = joints[JointType.ShoulderRight].Position; */
                                     CameraSpacePoint spinebase = joints[JointType.SpineBase].Position;
-                               /*     CameraSpacePoint spinemid = joints[JointType.SpineMid].Position;
-                                    CameraSpacePoint spineshoulder = joints[JointType.SpineShoulder].Position;
-                                    CameraSpacePoint thumbleft = joints[JointType.ThumbLeft].Position;
-                                    CameraSpacePoint  thumbright = joints[JointType.ThumbRight].Position;
-                                    CameraSpacePoint wristleft = joints[JointType.WristLeft].Position;
-                                    CameraSpacePoint wristright = joints[JointType.WristRight].Position; */
+                                    /*     CameraSpacePoint spinemid = joints[JointType.SpineMid].Position;
+                                         CameraSpacePoint spineshoulder = joints[JointType.SpineShoulder].Position;
+                                         CameraSpacePoint thumbleft = joints[JointType.ThumbLeft].Position;
+                                         CameraSpacePoint  thumbright = joints[JointType.ThumbRight].Position;
+                                         CameraSpacePoint wristleft = joints[JointType.WristLeft].Position;
+                                         CameraSpacePoint wristright = joints[JointType.WristRight].Position; */
 
-                                   
-                              
-                                    try
-                                    {
-                                        if (intime<6)
-                                        {
-                                          //  timer++;
-                                            listhead.Add(anshead);
-                                            listspinebase.Add(ansspinebase);
+                                   numnumeratorhead = X * head.X + Y * head.Y + Z * head.Z + W;
+                                   numnumeratorspinebase = X * spinebase.X + Y * spinebase.Y + Z * spinebase.Z + W;
+                                   denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
 
-                                        }
-                                        Parallel.Invoke(() =>
-                                        {
-                                            double numnumeratorhead = X * head.X + Y * head.Y + Z * head.Z + W;
-                                            double numnumeratorspinebase = X * spinebase.X + Y * spinebase.Y + Z * spinebase.Z + W;
-                                            double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
-                                              anshead = Math.Round(numnumeratorhead/denominator , 3);
-                                               ansspinebase = Math.Round(numnumeratorspinebase/denominator , 3);
-                                            
+                                    /*       try
+                                           {
+                                               if (intime<6)
+                                               {
+                                                 //  timer++;
+                                                   listhead.Add(anshead);
+                                                   listspinebase.Add(ansspinebase);
 
-
-                                        }
+                                               }
+                                               Parallel.Invoke(() =>
+                                               {
+                                                   double numnumeratorhead = X * head.X + Y * head.Y + Z * head.Z + W;
+                                                   double numnumeratorspinebase = X * spinebase.X + Y * spinebase.Y + Z * spinebase.Z + W;
+                                                   double denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
+                                                     anshead = Math.Round(numnumeratorhead/denominator , 3);
+                                                      ansspinebase = Math.Round(numnumeratorspinebase/denominator , 3);
 
 
-                                            );
-                                    }
-                                    catch(AggregateException a)
-                                    {
-                                        Console.WriteLine(a);
-                                    }
-                                   
-                                   
+
+                                               }
 
 
-                              //      numerator = X * ankleft.X + Y * ankleft.Y + Z * ankleft.Z + W;
-                               //     denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
-                                //    a = Math.Round(numerator / denominator , 3);
+                                                   );
+                                           }
+                                           catch(AggregateException a)
+                                           {
+                                               Console.WriteLine(a);
+                                           }
+                                     */
+
+
+
+                                    //      numerator = X * ankleft.X + Y * ankleft.Y + Z * ankleft.Z + W;
+                                    //     denominator = Math.Sqrt(X * X + Y * Y + Z * Z);
+                                    //    a = Math.Round(numerator / denominator , 3);
 
 
                                     /*     double numerator = X * ee.X + Y * ee.Y + Z * ee.Z + W;
@@ -660,7 +705,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                             }
                                             Console.WriteLine(y); */
 
-                                  
+
 
 
 

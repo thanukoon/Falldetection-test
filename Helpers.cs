@@ -50,18 +50,20 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //double d = 7.2;
             
             ArrayList listnn = new ArrayList();
-            
-            for (int i = 0; i < vector.Length; ++i)
-            {
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\wei.csv")) //offline
+            { //offline
 
-                if (i % valsPerRow == 0)
+                for (int i = 0; i < vector.Length; ++i)
+                {
 
-                    Console.WriteLine("");
-                Console.Write(vector[i].ToString("F" + decimals).PadLeft(decimals + 4) + " ");
-                a[i] =Math.Round (vector[i],1);
-               
-               
+                    if (i % valsPerRow == 0)
 
+                        Console.WriteLine("");
+                    Console.Write(vector[i].ToString("F" + decimals).PadLeft(decimals + 4) + " ");
+                    a[i] = Math.Round(vector[i], 3);
+                    writer.WriteLine(vector[i].ToString(), 3); //test csv weight
+
+                }
             }
             if (newLine == true)
             {

@@ -12,21 +12,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class NN
     {
-        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "tt.csv"); //breast-cancer-wisconsin
+        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "fall1.csv"); //breast-cancer-wisconsin
        // private static readonly string scource = 
         // Number of input neurons, hidden neurons and output neurons
 
 
             
 
-        private static readonly int[] inputColumns = { 0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52,53,54 }; // ไว้เพิ่มcolumn
+        private static readonly int[] inputColumns = { 0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54 }; // ไว้เพิ่มcolumn
         //private static readonly int numInput = inputColumns.Length;
-        private static readonly int numInput = 90;
-        private const int numHidden = 90; 
+        private static readonly int numInput = inputColumns.Length;
+        private const int numHidden = 20; 
         private const int numOutput = 2;
         
         // Parameters for NN training
-        private const int maxEpochs = 1;
+        private const int maxEpochs = 500;
         private const double learnRate = 0.05;
         private const double momentum = 0.01;
         private const double weightDecay = 0.0001;
@@ -45,75 +45,26 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Console.WriteLine("Loading source file and generating data sets...");
             var rows = File.ReadAllLines(sourceFile);
             var data = new List<double[]>();
-            var data2 = new List<double[]>();
-            var datatest = new List<double>();
-            var datatest2 = new List<double>();
-            var testt = new List<int>();
+
             //  testt.AddRange(inputColumns);
-            for (int j =0; j<1501;j++)
-            {
-                testt.Add(j);
-            }
-            //Console.WriteLine(inputColumns.Count());
-        
+
+
             foreach (var row in rows)
             {
-
-               // Console.WriteLine(row);
-                // var values = row.Split(',');
-
-                var values = row.Split( ',', 'o' ); // split ตัวที่มีเครื่องหมาย , กับ " ออก 
-
-                //    var valu = row.Split('"');
-           
-
-
+                var values = row.Split(',');
                 var observation = new double[values.Length];
-                 
-              //  Console.WriteLine(values.Length);
-
                 for (int i = 0; i < values.Length; i++)
                 {
                     double.TryParse(values[i], out observation[i]);
-                
-                    if (i % 2 == 0)
-                    {
-                            datatest.Add(observation[i]);
-                      
-                    }
-                    else if( i % 2 != 0)
-                    {
-                        datatest.Add(observation[i]);
-                    }
-                
-                 
                 }
-                Console.WriteLine(datatest.Count);
-
-               for (int i = 0; i<datatest.Count;i++)
-                {
-                    if (i % 2 == 0)
-                    {
-                        Console.WriteLine(datatest[i]); //ค่อยแยก ตอนหลัง
-                    }
-                } 
-                
                 data.Add(observation);
-             //   data.Add(observation1);
-               // Console.WriteLine(data.Count);
-               // data.Add(datatest2.ToArray());
-              //  Console.WriteLine(data.Count);
-                //   data.Add(observation);
-                //  Console.WriteLine(data.Count);
-
             }
-                      
-            
-            
-              
 
 
-            
+
+
+
+
 
             List<double[]> trainData;
             List<double[]> testData;
@@ -126,8 +77,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             #region Normalization
             Console.WriteLine("Normalizing data...");
-            List<double[]> normalizedTrainData = Helpers.NormalizeData(trainData, testt.ToArray());
-            List<double[]> normalizedTestData = Helpers.NormalizeData(testData, testt.ToArray());
+            List<double[]> normalizedTrainData = Helpers.NormalizeData(trainData,inputColumns);
+            List<double[]> normalizedTestData = Helpers.NormalizeData(testData, inputColumns);
 
             Console.WriteLine("Done!");
             Console.WriteLine();
@@ -138,7 +89,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             var nn = new NeuralNetwork(numInput, numHidden, numOutput);
 
             Console.WriteLine("Initializing weights and bias to small random values...");
-          //  nn.InitializeWeights();
+            nn.InitializeWeights();
 
             Console.WriteLine("Done!");
             Console.WriteLine();
