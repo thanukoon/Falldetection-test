@@ -12,7 +12,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class NN
     {
-        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "fall1.csv"); //breast-cancer-wisconsin
+        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "datatest.csv"); //breast-cancer-wisconsin
        // private static readonly string scource = 
         // Number of input neurons, hidden neurons and output neurons
 
@@ -30,12 +30,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private const double learnRate = 0.05;
         private const double momentum = 0.01;
         private const double weightDecay = 0.0001;
+        public static int cc;
         
+    
+
 
         public void yes ()
         {
-            
 
+            var datahead = new List<double[]>();
+            var dataspine = new List<double[]>();
             Console.WriteLine("Neural Network Demo using .NET by Sebastian Brandes");
             Console.WriteLine("Data Set: Breast Cancer Wisconsin (Diagnostic), November 1995");
             // Source: http://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/
@@ -45,25 +49,66 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Console.WriteLine("Loading source file and generating data sets...");
             var rows = File.ReadAllLines(sourceFile);
             var data = new List<double[]>();
+            var data2 = new List<double[]>();
 
             //  testt.AddRange(inputColumns);
-
+            int count = 0;
+            int countdown = 0;
+            
 
             foreach (var row in rows)
             {
                 var values = row.Split(',');
+                cc = values.Length;
                 var observation = new double[values.Length];
-                for (int i = 0; i < values.Length; i++)
+              
+              
+               for (int i = 0; i < values.Length; i++)
                 {
-                    double.TryParse(values[i], out observation[i]);
+                  double.TryParse(values[i], out observation[i]);
+                    count++;
                 }
+                count = 0;
+                countdown++;
                 data.Add(observation);
+               
             }
 
+            //   ab = data.ToArray();
+            datahead.AddRange(data);
+            int remove = data.Count / 2;
+            datahead.RemoveRange(0,remove);
+            dataspine.AddRange(datahead);
+            int head = 0;
+            int spine = 0;
 
-
-
-
+            for (int i = 0;  i<data.Count; i++)
+            {
+                if(i % 2 == 0)
+                {
+                    for (int j = 0; j<cc;j++)
+                    {
+                        datahead[head][j] = data[i][j];
+                        Console.WriteLine(datahead[head][j]);
+                    }
+                    Console.WriteLine("asd");
+                    head++;
+                }
+                else
+                {
+                    for (int j = 0; j<cc; j++)
+                    {
+                        dataspine[spine][j] = data[i][j];
+                       
+                    }
+                    spine++;
+                }
+               
+            }
+          //  Console.WriteLine(datahead.Count);
+            
+          
+           
 
 
             List<double[]> trainData;
