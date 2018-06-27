@@ -9,9 +9,9 @@ using System.Collections;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
-    class Helpers
+    class Helperspine
     {
-        
+
 
 
 
@@ -45,12 +45,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public static void ShowVector(double[] vector, int valsPerRow, int decimals, bool newLine)
         {
-           double[] a = vector;
-           bool c ;
+            double[] a = vector;
+            bool c;
             //double d = 7.2;
-            
+
             ArrayList listnn = new ArrayList();
-            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\weihead.csv")) //offline
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\weispine.csv")) //offline
             { //offline
 
                 for (int i = 0; i < vector.Length; ++i)
@@ -69,29 +69,29 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 Console.WriteLine(" ");
 
-               
-                
-           /*     listnn.AddRange(a);                       ลองเช็คด้วยbinsearch 
-                listnn.Sort();
-                foreach (object data in  listnn)
-                {
-                    Console.WriteLine(data);
-                }
-                int b = listnn.BinarySearch(7.2);
-                c = Convert.ToBoolean(b);
-                if (b>0)
-                {
 
-                    if (c)
-                        Console.WriteLine(c);
 
-                }
-                else
-                {
-                    Console.WriteLine("False");
-                }*/
-              
-              
+                /*     listnn.AddRange(a);                       ลองเช็คด้วยbinsearch 
+                     listnn.Sort();
+                     foreach (object data in  listnn)
+                     {
+                         Console.WriteLine(data);
+                     }
+                     int b = listnn.BinarySearch(7.2);
+                     c = Convert.ToBoolean(b);
+                     if (b>0)
+                     {
+
+                         if (c)
+                             Console.WriteLine(c);
+
+                     }
+                     else
+                     {
+                         Console.WriteLine("False");
+                     }*/
+
+
 
 
 

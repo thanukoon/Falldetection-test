@@ -89,7 +89,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     for (int j = 0; j<cc;j++)
                     {
                         datahead[head][j] = data[i][j];
-                        Console.WriteLine(datahead[head][j]);
+                        
                     }
                     Console.WriteLine("asd");
                     head++;
@@ -99,21 +99,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     for (int j = 0; j<cc; j++)
                     {
                         dataspine[spine][j] = data[i][j];
-                       
+                        Console.WriteLine(dataspine[spine][j]);
+
                     }
                     spine++;
                 }
                
             }
-          //  Console.WriteLine(datahead.Count);
-            
-          
-           
+
+
+
 
 
             List<double[]> trainData;
             List<double[]> testData;
-            Helpers.GenerateDataSets(data, out trainData, out testData, 0.8);
+            Helpers.GenerateDataSets(datahead, out trainData, out testData, 0.8);
 
             Console.WriteLine("Done!");
             Console.WriteLine();
@@ -162,12 +162,73 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Console.WriteLine("Accuracy on test data = " + testAcc.ToString("F4"));
             Console.WriteLine();
 
+
+
+
+            ///spine neuralnetwork
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Spinebase neuralnetwork");
+
+            List<double[]> trainDataspine;
+            List<double[]> testDataspine;
+            Helperspine.GenerateDataSets(dataspine, out trainDataspine, out testDataspine, 0.8);
+
+            Console.WriteLine("Done!");
+            Console.WriteLine();
+            #endregion
+
+
+            #region Normalization
+            Console.WriteLine("Normalizing data...");
+            List<double[]> normalizedTrainDataspine = Helperspine.NormalizeData(trainDataspine, inputColumns);
+            List<double[]> normalizedTestDataspine = Helperspine.NormalizeData(testDataspine, inputColumns);
+
+            Console.WriteLine("Done!");
+            Console.WriteLine();
+            #endregion
+
+            #region Initializing the Neural Network
+            //Console.WriteLine("Creating a new {0}-input, {1}-hidden, {2}-output neural network...", numInput, numHidden, numOutput);
+            var nn2 = new NeuralNetworkspine(numInput, numHidden, numOutput);
+
+            Console.WriteLine("Initializing weights and bias to small random values...");
+            nn2.InitializeWeights();
+
+            Console.WriteLine("Done!");
+            Console.WriteLine();
+            #endregion
+
+            #region Training
+            Console.WriteLine("Beginning training using incremental back-propagation...");
+            nn2.Train(normalizedTrainDataspine.ToArray(), maxEpochs, learnRate, momentum, weightDecay);
+
+            Console.WriteLine("Done!");
+            Console.WriteLine();
+            #endregion
+
+            #region Results
+            double[] weightspine = nn2.GetWeights();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Final neural network weights and bias values:");
+            Console.ResetColor();
+            Helperspine.ShowVector(weightspine, 10, 3, true);
+            Console.WriteLine();
+
+            double trainAccspine = nn2.Accuracy(normalizedTrainData.ToArray());
+            Console.WriteLine("Accuracy on training data = " + trainAccspine.ToString("F4"));
+            double testAccspine = nn2.Accuracy(normalizedTestData.ToArray());
+            Console.WriteLine("Accuracy on test data = " + testAccspine.ToString("F4"));
+            Console.WriteLine();
+
+
             //Console.ForegroundColor = ConsoleColor.Green;
             //Console.WriteLine("Raw results:");
             //Console.ResetColor();
             //Console.WriteLine(nn.ToString());
             #endregion
-            
+
 
 
         }
