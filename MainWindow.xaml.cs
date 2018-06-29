@@ -49,7 +49,38 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         double numnumeratorhead;
         double numnumeratorspinebase ;
         double denominator;
+        double[] slidhead;
+        double[] slidspine;
+        public static double[] sliding;
+        public double[] slidinghead;
+        public double[] slidingspine;
 
+        public double[] printmin(double[] arr, int n)
+        {
+            int k = 16;
+            int bfslide = 80;
+            int count = 0;
+            int j;
+            double min;
+            for (int i = 0; i < n - k; i++)
+            {
+                min = arr[i];
+                for (j = 1; j < k; j++)
+                {
+                    if (arr[i + j] < min)
+                    {
+                        min = arr[i + j];
+                    }
+                }
+                sliding[i] = Math.Round(min, 3);
+            }
+            for (int i = arr.Length - count; i < arr.Length; i++)
+            {
+                arr[i] = sliding[i - bfslide];
+            }
+            return arr;
+          
+        }
 
 
 
@@ -88,9 +119,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 {
                     for(int i = 0; i < listhead.Count; i++)
                     {
-                        var it = listhead[i].ToString();
-                        var it2 = listspinebase[i].ToString();
-                        writer.WriteLine(it+","+it2);
+                        slidhead[i] = listhead[i];
+                        slidspine[i] = listspinebase[i];
+                    }
+                    slidinghead = printmin(slidhead, slidhead.Length);
+                    slidingspine = printmin(slidingspine, slidingspine.Length);
+                    for (int i = 0; i<slidinghead.Length;i++)
+                    {
+                        var it = slidinghead[i].ToString();
+                        var it2 = slidingspine[i].ToString();
+                        writer.WriteLine(it + "," + it2);
+
                     }
                 }
 
