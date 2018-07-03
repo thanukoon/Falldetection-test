@@ -33,33 +33,36 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public int intime=6;
+        public int intime = 6;
         public int timer = 0;
         List<double> list2 = new List<double>();
         DispatcherTimer dt = new DispatcherTimer();
         DispatcherTimer dt2 = new DispatcherTimer();
 
         double numerator;
-   
-      double ans;
-        double ans2;
-      
+
+        int ans;
+        int ans2;
+
         double anshead;
         double ansspinebase;
         double numnumeratorhead;
-        double numnumeratorspinebase ;
+        double numnumeratorspinebase;
         double denominator;
-        double[] slidhead;
-        double[] slidspine;
-        public static double[] sliding;
-        public double[] slidinghead;
-        public double[] slidingspine;
+        public double[] slidhead = new double[100];
+        public double[] slidspine = new double[100];
+        public double[] sliding = new double[100];
+        public double[] slidinghead = new double[100];
+        public double[] slidingspine = new double[100];
+        public double datatt = 0;
+        public double datattspine = 0;
+        public static int countaa = 0;
 
         public double[] printmin(double[] arr, int n)
         {
-            int k = 16;
+            int k = 20;
             int bfslide = 80;
-            int count = 0;
+            int count = 20;
             int j;
             double min;
             for (int i = 0; i < n - k; i++)
@@ -74,12 +77,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 }
                 sliding[i] = Math.Round(min, 3);
             }
+            //    Console.WriteLine(count);
+            //   Console.WriteLine(arr.Length - count);
+            //  Console.WriteLine(arr.Length);
             for (int i = arr.Length - count; i < arr.Length; i++)
             {
                 arr[i] = sliding[i - bfslide];
             }
+            count = 0;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                count++;
+            }
+            //  Console.WriteLine(count);
             return arr;
-          
+
         }
 
 
@@ -87,44 +99,68 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void dtTicker(object sender, EventArgs e)
         {
             //  list2.Add(a);
-           
+
             intime--;
             timer++;
             time.Text = intime.ToString();
             //Console.WriteLine(timer);
-           
-             Console.WriteLine(intime);
+
+            Console.WriteLine(intime);
             if (intime == 0)
             {
-            /*    using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\head.csv"))
+                for (int i = 0; i < listhead.Count; i++)
                 {
-                    foreach (object it in listhead )
-                    {
-                        writer.WriteLine(it);
-                        var ti = String.Format("first , sec" +listhead,listspinebase);
-                    }
-
-
+                    slidhead[i] = listhead[i];
+                    // Console.WriteLine(slidhead[i]);
+                    slidspine[i] = listspinebase[i];
                 }
-                using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\spinebase.csv"))
+
+                ans = slidhead.Length - listhead.Count;
+
+                if (ans != 20)
                 {
-                    foreach (object it in listspinebase)
+                    for (int i = slidhead.Length - ans; i <= 80; i++)
                     {
-                        writer.WriteLine(it);
+                        slidhead[i] = slidhead[slidhead.Length - ans - 1];
+                        slidspine[i] = slidspine[slidhead.Length - ans - 1];
                     }
+                }
 
 
-                }*/
+                Console.WriteLine(listhead.Count);
+                //for (int i = 0; i < listhead.Count; i++)
+                //{
+                //    if (listhead[i] == 0)
+                //    {
+                //        datatt = slidhead[i - 1];
+                //        datattspine = slidspine[i - 1];
+                //        countaa = i;
+                //        break;
+
+                //    }
+                //}
+                //Console.WriteLine(countaa);
+                //for (int i = countaa; i < listhead.Count; i++)
+                //{
+
+                //    slidinghead[i] = datatt;
+                //    slidingspine[i] = datattspine;
+                //}
                 using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
                 {
-                    for(int i = 0; i < listhead.Count; i++)
-                    {
-                        slidhead[i] = listhead[i];
-                        slidspine[i] = listspinebase[i];
-                    }
+
+
+                    //  Console.WriteLine(listhead.Count());
+
                     slidinghead = printmin(slidhead, slidhead.Length);
-                    slidingspine = printmin(slidingspine, slidingspine.Length);
-                    for (int i = 0; i<slidinghead.Length;i++)
+                    slidingspine = printmin(slidspine, slidspine.Length);
+
+                    for (int i = 0; i < slidinghead.Length; i++)
+                    {
+                        // Console.WriteLine(slidingspine[i]);
+                    }
+
+                    for (int i = 0; i < slidinghead.Length; i++)
                     {
                         var it = slidinghead[i].ToString();
                         var it2 = slidingspine[i].ToString();
@@ -132,12 +168,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                     }
                 }
-
-
-
-                    this.Close();
+                this.Close();
             }
-           
         }
 
         private void dataTicker(object sender, EventArgs e)
@@ -160,8 +192,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     listhead.Add(anshead);
                     listspinebase.Add(ansspinebase);
 
-                    Console.WriteLine(anshead);
-                    Console.WriteLine(ansspinebase);
+                    //   Console.WriteLine(anshead);
+                    //  Console.WriteLine(ansspinebase);
 
                 }
             }
@@ -175,17 +207,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+
             test t2 = new test();
             dt.Interval = TimeSpan.FromSeconds(1);
             dt.Tick += dtTicker;
-        //    Console.WriteLine(timer);
+            //    Console.WriteLine(timer);
             dt.Start();
 
             dt2.Interval = TimeSpan.FromSeconds(0.05);
             dt2.Tick += dataTicker;
             dt2.Start();
-            
+
 
             /*  /*    foreach (object list2 in list1)
                   {
