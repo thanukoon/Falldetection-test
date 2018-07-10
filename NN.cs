@@ -12,7 +12,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class NN
     {
-        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "ttest.csv"); //breast-cancer-wisconsin
+        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "head.csv"); //breast-cancer-wisconsin
        // private static readonly string scource = 
         // Number of input neurons, hidden neurons and output neurons
 
@@ -22,11 +22,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private static readonly int[] inputColumns = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99 }; // ไว้เพิ่มcolumn
         //private static readonly int numInput = inputColumns.Length;
         private static readonly int numInput = inputColumns.Length;
-        private const int numHidden = 50; 
+        private const int numHidden = 50;
         private const int numOutput = 2;
         
         // Parameters for NN training
-        private const int maxEpochs = 500;
+        private const int maxEpochs = 2000;
         private const double learnRate = 0.05;
         private const double momentum = 0.01;
         private const double weightDecay = 0.0001;
@@ -37,7 +37,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public void yes ()
         {
-
             var datahead = new List<double[]>();
             var dataspine = new List<double[]>();
             Console.WriteLine("Neural Network Demo using .NET by Sebastian Brandes");
@@ -91,7 +90,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         datahead[head][j] = data[i][j];
                         
                     }
-                    Console.WriteLine("asd");
+                   // Console.WriteLine("asd");
                     head++;
                 }
                 else
@@ -99,13 +98,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     for (int j = 0; j<cc; j++)
                     {
                         dataspine[spine][j] = data[i][j];
-                        Console.WriteLine(dataspine[spine][j]);
+                        //Console.WriteLine(dataspine[spine][j]);
 
                     }
                     spine++;
                 }
                
             }
+            Console.WriteLine(dataspine.Count);
+            Console.WriteLine(datahead.Count);
 
 
 
@@ -162,10 +163,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Console.WriteLine("Accuracy on test data = " + testAcc.ToString("F4"));
             Console.WriteLine();
 
+            
 
+           
 
 
             ///spine neuralnetwork
+            ///
+
+
+
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
@@ -216,22 +223,27 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Helperspine.ShowVector(weightspine, 10, 3, true);
             Console.WriteLine();
 
-            double trainAccspine = nn2.Accuracy(normalizedTrainData.ToArray());
+            double trainAccspine = nn2.Accuracy(normalizedTrainDataspine.ToArray());
             Console.WriteLine("Accuracy on training data = " + trainAccspine.ToString("F4"));
-            double testAccspine = nn2.Accuracy(normalizedTestData.ToArray());
+            double testAccspine = nn2.Accuracy(normalizedTestDataspine.ToArray());
             Console.WriteLine("Accuracy on test data = " + testAccspine.ToString("F4"));
             Console.WriteLine();
 
-
+            nn2.show();
             //Console.ForegroundColor = ConsoleColor.Green;
             //Console.WriteLine("Raw results:");
             //Console.ResetColor();
             //Console.WriteLine(nn.ToString());
             #endregion
-
+            for (int i = 0; i < weights.Length; i++)
+            {
+              //   Console.WriteLine(weights[i] + "  " +weightspine[i]);
+            }
+            //Console.WriteLine(nn2.ToString());
 
 
         }
+        
     }
 
 

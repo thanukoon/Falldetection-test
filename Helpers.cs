@@ -50,7 +50,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //double d = 7.2;
             
             ArrayList listnn = new ArrayList();
-            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\weihead.csv")) //offline
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\weihead3.csv")) //offline
             { //offline
 
                 for (int i = 0; i < vector.Length; ++i)
@@ -59,7 +59,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     if (i % valsPerRow == 0)
 
                         Console.WriteLine("");
-                    Console.Write(vector[i].ToString("F" + decimals).PadLeft(decimals + 4) + " ");
+                    Console.Write(vector[i].ToString("F" + decimals).PadLeft(decimals + 4) + " " );
                     a[i] = Math.Round(vector[i], 3);
                     writer.WriteLine(vector[i].ToString(), 3); //test csv weight
 
@@ -68,32 +68,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (newLine == true)
             {
                 Console.WriteLine(" ");
-
-               
-                
-           /*     listnn.AddRange(a);                       ลองเช็คด้วยbinsearch 
-                listnn.Sort();
-                foreach (object data in  listnn)
-                {
-                    Console.WriteLine(data);
-                }
-                int b = listnn.BinarySearch(7.2);
-                c = Convert.ToBoolean(b);
-                if (b>0)
-                {
-
-                    if (c)
-                        Console.WriteLine(c);
-
-                }
-                else
-                {
-                    Console.WriteLine("False");
-                }*/
-              
-              
-
-
 
 
             }

@@ -60,7 +60,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public double[] printmin(double[] arr, int n)
         {
-            int k = 20;
+            int k = 60;
             int bfslide = 80;
             int count = 20;
             int j;
@@ -125,27 +125,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         slidspine[i] = slidspine[slidhead.Length - ans - 1];
                     }
                 }
-
-
-                Console.WriteLine(listhead.Count);
-                //for (int i = 0; i < listhead.Count; i++)
-                //{
-                //    if (listhead[i] == 0)
-                //    {
-                //        datatt = slidhead[i - 1];
-                //        datattspine = slidspine[i - 1];
-                //        countaa = i;
-                //        break;
-
-                //    }
-                //}
-                //Console.WriteLine(countaa);
-                //for (int i = countaa; i < listhead.Count; i++)
-                //{
-
-                //    slidinghead[i] = datatt;
-                //    slidingspine[i] = datattspine;
-                //}
                 using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
                 {
 

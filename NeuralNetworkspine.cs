@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,55 +81,99 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             s += "numInput = " + numInput + " numHidden = " + numHidden + " numOutput = " + numOutput + "\n\n";
 
             s += "inputs: \n";
-            for (int i = 0; i < inputs.Length; ++i)
-                s += inputs[i].ToString("F2") + " ";
-            s += "\n\n";
-
-            s += "ihWeights: \n";
-            for (int i = 0; i < ihWeights.Length; ++i)
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\input.csv"))
             {
-                for (int j = 0; j < ihWeights[i].Length; ++j)
+                for (int i = 0; i < inputs.Length; ++i)
                 {
-                    s += ihWeights[i][j].ToString("F4") + " ";
+
+                    s += inputs[i].ToString("F2") + " ";
+                    writer.WriteLine(inputs[i].ToString(), 3);
                 }
-                s += "\n";
+            }
+
+            s += "\n\n";
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\ihweight.csv"))
+            {
+                s += "ihWeights: \n";
+                for (int i = 0; i < ihWeights.Length; ++i)
+                {
+                    for (int j = 0; j < ihWeights[i].Length; ++j)
+                    {
+                        s += ihWeights[i][j].ToString("F4") + " ";
+                        writer.WriteLine(ihWeights[i][j].ToString(), 3);
+                    }
+                    s += "\n";
+                }
             }
             s += "\n";
 
             s += "hBiases: \n";
-            for (int i = 0; i < hBiases.Length; ++i)
-                s += hBiases[i].ToString("F4") + " ";
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\hbias.csv")) {
+                for (int i = 0; i < hBiases.Length; ++i)
+                {
+                    s += hBiases[i].ToString("F4") + " ";
+                    writer.WriteLine(hBiases[i].ToString(), 3);
+                }
+            }
             s += "\n\n";
 
             s += "hOutputs: \n";
-            for (int i = 0; i < hOutputs.Length; ++i)
-                s += hOutputs[i].ToString("F4") + " ";
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\houtput.csv")) {
+                for (int i = 0; i < hOutputs.Length; ++i)
+                {
+                    s += hOutputs[i].ToString("F4") + " ";
+                    writer.WriteLine(hOutputs[i].ToString(), 3);
+                }
+            }
             s += "\n\n";
 
             s += "hoWeights: \n";
-            for (int i = 0; i < hoWeights.Length; ++i)
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\howeight.csv"))
             {
-                for (int j = 0; j < hoWeights[i].Length; ++j)
+                for (int i = 0; i < hoWeights.Length; ++i)
                 {
-                    s += hoWeights[i][j].ToString("F4") + " ";
+                    for (int j = 0; j < hoWeights[i].Length; ++j)
+                    {
+                        s += hoWeights[i][j].ToString("F4") + " ";
+                        writer.WriteLine(hoWeights[i][j].ToString(), 3);
+                    }
+                    s += "\n";
                 }
-                s += "\n";
             }
             s += "\n";
 
             s += "oBiases: \n";
-            for (int i = 0; i < oBiases.Length; ++i)
-                s += oBiases[i].ToString("F4") + " ";
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\obias.csv"))
+            {
+                for (int i = 0; i < oBiases.Length; ++i)
+                {
+                    s += oBiases[i].ToString("F4") + " ";
+                    writer.WriteLine(oBiases[i].ToString(), 3);
+                }
+
+            }
             s += "\n\n";
 
             s += "hGrads: \n";
-            for (int i = 0; i < hGrads.Length; ++i)
-                s += hGrads[i].ToString("F4") + " ";
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\hgrad.csv"))
+            {
+                for (int i = 0; i < hGrads.Length; ++i)
+                {
+                    s += hGrads[i].ToString("F4") + " ";
+                    writer.WriteLine(hGrads[i].ToString(), 3);
+                }
+            }
             s += "\n\n";
 
             s += "oGrads: \n";
-            for (int i = 0; i < oGrads.Length; ++i)
-                s += oGrads[i].ToString("F4") + " ";
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\ograd.csv"))
+            {
+                for (int i = 0; i < oGrads.Length; ++i)
+                {
+                    s += oGrads[i].ToString("F4") + " ";
+                    writer.WriteLine(oGrads[i].ToString(), 3);
+                }
+            }
             s += "\n\n";
 
             s += "ihPrevWeightsDelta: \n";
@@ -159,8 +204,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             s += "\n";
 
             s += "oPrevBiasesDelta: \n";
-            for (int i = 0; i < oPrevBiasesDelta.Length; ++i)
-                s += oPrevBiasesDelta[i].ToString("F4") + " ";
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\oprevbias.csv"))
+            {
+                for (int i = 0; i < oPrevBiasesDelta.Length; ++i)
+                {
+                    s += oPrevBiasesDelta[i].ToString("F4") + " ";
+                    writer.WriteLine(oPrevBiasesDelta[i].ToString(), 3);
+                }
+
+            }
             s += "\n\n";
 
             s += "outputs: \n";
@@ -169,7 +221,20 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             s += "\n\n";
 
             s += "===============================\n";
+            
             return s;
+        }
+        public void re ()
+        {
+            for (int i = 0; i < ihWeights.Length; ++i)
+            {
+                for (int j = 0; j < ihWeights[i].Length; ++j)
+                {
+                    Console.WriteLine(ihWeights[i][j]);
+                }
+              
+            }
+
         }
 
         // ----------------------------------------------------------------------------------------
@@ -207,24 +272,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.SetWeights(initialWeights);
         }
 
-        public double[] GetWeights()
-        {
-            // returns the current set of wweights, presumably after training
-            int numWeights = (numInput * numHidden) + (numHidden * numOutput) + numHidden + numOutput;
-            double[] result = new double[numWeights];
-            int k = 0;
-            for (int i = 0; i < ihWeights.Length; ++i)
-                for (int j = 0; j < ihWeights[0].Length; ++j)
-                    result[k++] = ihWeights[i][j];
-            for (int i = 0; i < hBiases.Length; ++i)
-                result[k++] = hBiases[i];
-            for (int i = 0; i < hoWeights.Length; ++i)
-                for (int j = 0; j < hoWeights[0].Length; ++j)
-                    result[k++] = hoWeights[i][j];
-            for (int i = 0; i < oBiases.Length; ++i)
-                result[k++] = oBiases[i];
-            return result;
-        }
+        
 
         // ----------------------------------------------------------------------------------------
 
@@ -483,6 +531,38 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 }
             }
             return bigIndex;
+        }
+        public double[] GetWeights()
+        {
+            // returns the current set of wweights, presumably after training
+            int numWeights = (numInput * numHidden) + (numHidden * numOutput) + numHidden + numOutput;
+            double[] result = new double[numWeights];
+            int k = 0;
+
+
+            for (int i = 0; i < ihWeights.Length; ++i)
+            {
+                for (int j = 0; j < ihWeights[0].Length; ++j)
+                {
+                    result[k++] = ihWeights[i][j];
+                }
+            }
+
+            for (int i = 0; i < hBiases.Length; ++i)
+                result[k++] = hBiases[i];
+            for (int i = 0; i < hoWeights.Length; ++i)
+                for (int j = 0; j < hoWeights[0].Length; ++j)
+                    result[k++] = hoWeights[i][j];
+            for (int i = 0; i < oBiases.Length; ++i)
+                result[k++] = oBiases[i];
+            return result;
+        }
+        public void show()
+        {
+            for (int i = 0; i<ihWeights[0].Length;i++)
+            {
+               // Console.WriteLine(ihWeights[0][i]);
+            }
         }
 
     } // NeuralNetwork
