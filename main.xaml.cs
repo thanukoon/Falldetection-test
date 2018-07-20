@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
 using System.Timers;
+using ProgressRingControl;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -32,7 +33,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             progress.IsIndeterminate = true;
             await LoadData();
-            
+          
 
             MainWindow c2 = new MainWindow();
             c2.Show();

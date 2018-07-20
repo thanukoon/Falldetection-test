@@ -12,7 +12,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class NN
     {
-        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "head.csv"); //breast-cancer-wisconsin
+        private static readonly string sourceFile = Path.Combine(Environment.CurrentDirectory, "datalak.csv"); //breast-cancer-wisconsin
        // private static readonly string scource = 
         // Number of input neurons, hidden neurons and output neurons
 

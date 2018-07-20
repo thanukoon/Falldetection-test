@@ -50,7 +50,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //double d = 7.2;
             
             ArrayList listnn = new ArrayList();
-            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\weihead3.csv")) //offline
+            using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\onlinedetec\bin\AnyCPU\Debug\weiheadlak619.csv")) //offline
             { //offline
 
                 for (int i = 0; i < vector.Length; ++i)

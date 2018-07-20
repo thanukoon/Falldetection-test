@@ -58,14 +58,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public double datattspine = 0;
         public static int countaa = 0;
 
-        public double[] printmin(double[] arr, int n)
+        public double[] printmin(double[] arr, int n)  
         {
+            int m = 80;
             int k = 60;
             int bfslide = 80;
             int count = 20;
             int j;
+            int slidevalue = 19;
             double min;
-            for (int i = 0; i < n - k; i++)
+            for (int i = 0; i < m - k; i++)
             {
                 min = arr[i];
                 for (j = 1; j < k; j++)
@@ -82,7 +84,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //  Console.WriteLine(arr.Length);
             for (int i = arr.Length - count; i < arr.Length; i++)
             {
-                arr[i] = sliding[i - bfslide];
+                arr[i] = sliding[slidevalue];
+                slidevalue--;
             }
             count = 0;
             for (int i = 0; i < arr.Length; i++)
@@ -93,6 +96,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             return arr;
 
         }
+
 
 
 
@@ -117,32 +121,39 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 ans = slidhead.Length - listhead.Count;
 
-                if (ans != 20)
-                {
-                    for (int i = slidhead.Length - ans; i <= 80; i++)
+               // if (ans != 20)  //ลากยาว
+              //  {
+                    for (int i = slidhead.Length - ans; i < 100; i++) //ช่องอาเรย์ 80ช่อง
                     {
                         slidhead[i] = slidhead[slidhead.Length - ans - 1];
                         slidspine[i] = slidspine[slidhead.Length - ans - 1];
                     }
-                }
+              //  }
+
                 using (TextWriter writer = File.CreateText(@"C:\Users\Goon\Desktop\sppj2\Falldetection-test\bin\AnyCPU\Debug\data.csv"))
                 {
 
 
                     //  Console.WriteLine(listhead.Count());
 
-                    slidinghead = printmin(slidhead, slidhead.Length);
-                    slidingspine = printmin(slidspine, slidspine.Length);
+                    // slidinghead = printmin(slidhead, slidhead.Length);    จะเข้า sliding
+                    // slidingspine = printmin(slidspine, slidspine.Length);
+                   
+                   
 
                     for (int i = 0; i < slidinghead.Length; i++)
                     {
-                        // Console.WriteLine(slidingspine[i]);
+                         Console.WriteLine(slidingspine[i] +"       " +slidinghead[i]);
                     }
 
                     for (int i = 0; i < slidinghead.Length; i++)
                     {
-                        var it = slidinghead[i].ToString();
-                        var it2 = slidingspine[i].ToString();
+                        //var it = slidinghead[i].ToString();
+                        //var it2 = slidingspine[i].ToString();
+                        //writer.WriteLine(it + "," + it2);
+
+                        var it = slidhead[i].ToString();
+                        var it2 = slidspine[i].ToString();
                         writer.WriteLine(it + "," + it2);
 
                     }
@@ -150,6 +161,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.Close();
             }
         }
+     
 
         private void dataTicker(object sender, EventArgs e)
         {

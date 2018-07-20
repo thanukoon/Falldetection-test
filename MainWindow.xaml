@@ -20,7 +20,7 @@
 
         <TextBlock Name="TextH" Text="Position" FontSize="15" HorizontalAlignment="Right" Margin="0,18,14,22" Width="177" Grid.Column="1"/>
         <TextBlock Name="Texts" Text="Alert" FontSize="15" HorizontalAlignment="Left" Margin="299,18,0,22" Width="177"/>
-        <TextBlock Name="time" Text="TIME" FontSize="15" HorizontalAlignment="Left" Height="60" VerticalAlignment="Bottom" Margin="164,0,0,477" Grid.RowSpan="2"/>
+        <TextBlock Name="time" Text="TIME" FontSize="15" HorizontalAlignment="Left" Height="60" VerticalAlignment="Bottom" Margin="142,0,0,459" Grid.RowSpan="2"/>
         <Viewbox Grid.Row="1" HorizontalAlignment="Center">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
