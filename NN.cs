@@ -178,6 +178,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Console.WriteLine();
             Console.WriteLine("Spinebase neuralnetwork");
 
+
             List<double[]> trainDataspine;
             List<double[]> testDataspine;
             Helperspine.GenerateDataSets(dataspine, out trainDataspine, out testDataspine, 0.8);
